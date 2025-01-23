@@ -8,7 +8,9 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
+        background: "#212121",
+        Sidebar: "#171717",
+        inbut: "#2f2f2f",
         foreground: "var(--foreground)",
       },
     },
