@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import React, { useState, useEffect } from "react";
 import Head from "next/head";
@@ -9,21 +10,13 @@ export default function Home() {
   const [results, setResults] = useState([]);
   const [filter, setFilter] = useState("all");
   const [isLoading, setIsLoading] = useState(false);
-  const [theme, setTheme] = useState("light");
   const [searchHistory, setSearchHistory] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") || "light";
-    setTheme(savedTheme);
-    document.documentElement.className = savedTheme;
+    const token = localStorage.getItem("token"); // افترض أن التوكن يتم تخزينه في Local Storage
+    setIsLoggedIn(!!token);
   }, []);
-
-  const toggleTheme = () => {
-    const newTheme = theme === "light" ? "dark" : "light";
-    setTheme(newTheme);
-    document.documentElement.className = newTheme;
-    localStorage.setItem("theme", newTheme);
-  };
 
   const handleSearch = async () => {
     if (query.trim() === "") return;
@@ -50,87 +43,84 @@ export default function Home() {
       </Head>
 
       {/* Sidebar */}
-      <aside className="w-64 bg-Sidebar text-white p-4 space-y-6">
-        <div className="text-2xl font-bold">Search History</div>
-        <ul className="space-y-2">
-          {searchHistory.map((history, index) => (
-            <li key={index} className="bg-gray-700 p-2 rounded">
-              {history}
-            </li>
-          ))}
-        </ul>
-        <div className="mt-6">
-          <Link
-            href="/login"
-            className="block bg-blue-500 text-white text-center py-2 rounded hover:bg-blue-600"
-          >
-            Login
-          </Link>
-          <Link
-            href="/signup"
-            className="block bg-green-500 text-white text-center py-2 mt-2 rounded hover:bg-green-600"
-          >
-            Sign Up
-          </Link>
-        </div>
-      </aside>
+      {/* Sidebar */}
+      {isLoggedIn && (
+        <aside className="w-64 bg-gray-800 text-white p-4 space-y-6">
+          <div className="text-2xl font-bold">Related Topics</div>
+          {/* هنا يمكن عرض المواضيع المرتبطة بالمستخدم */}
+          <ul>
+            <li>Topic 1</li>
+            <li>Topic 2</li>
+            <li>Topic 3</li>
+          </ul>
+        </aside>
+      )}
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col bg-gray-100 dark:bg-background text-Sidebar dark:text-gray-100 p-6">
+      <div className="flex-1 flex flex-col bg-gray-100 dark:bg-background text-Sidebar dark:text-gray-100 p-2">
         <header className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold">AI Search Platform</h1>
-          <button
-            onClick={toggleTheme}
-            className="w-10 h-10 flex items-center justify-center"
-          >
-            <img
-              src={theme === "light" ? "/sun.png" : "/moon.png"}
-              alt={theme === "light" ? "Light Mode" : "Dark Mode"}
-              className="w-8 h-8"
-            />
-          </button>
+          <h1 className="text-xl font-bold text-string">AI Search Platform</h1>
+          <div className="mt-0 flex text-sm text-center justify-center">
+            <Link
+              href="/login"
+              className="bg-white text-black p-2 mx-1 h-10 w-20 rounded-full hover:bg-slate-100"
+            >
+              Log in
+            </Link>
+            <Link
+              href="/signup"
+              className="bg-background border border-inbut text-white p-2 mx-1 h-10 w-20 rounded-full hover:bg-zinc-800"
+            >
+              Sign up
+            </Link>
+          </div>
         </header>
 
-        <main className="flex-1">
+        <main className="flex-1 mt-28">
           {/* Display Results Above the Search Input */}
-          <div className="w-full max-w-2xl mx-auto mt-52">
-            <div className="p-4 rounded shadow-md">
-              <div className="results space-y-4">
-                {results.map((result, index) => (
-                  <div key={index} className="border-b pb-4">
-                    {result.type === "article" && (
-                      <div>
-                        <h2 className="text-lg font-bold">{result.title}</h2>
-                        <p>{result.content}</p>
-                      </div>
-                    )}
-                    {result.type === "image" && (
-                      <div>
-                        <img
-                          src={result.url}
-                          alt={result.alt}
-                          className="w-full h-auto rounded"
-                        />
-                        <p>{result.caption}</p>
-                      </div>
-                    )}
-                    {result.type === "video" && (
-                      <div>
-                        <video
-                          controls
-                          src={result.url}
-                          className="w-full h-auto rounded"
-                        ></video>
-                        <p>{result.caption}</p>
-                      </div>
-                    )}
-                  </div>
-                ))}
+          {results ? (
+            <div className="w-full max-w-2xl mx-auto mt-52 text-center font-bold text-3xl m-5">
+              <h1>What are you looking for?</h1>
+            </div>
+          ) : (
+            <div className="w-full max-w-2xl mx-auto mt-52">
+              <div className="p-4 rounded shadow-md">
+                <div className="results space-y-4">
+                  {results.map((result, index) => (
+                    <div key={index} className="border-b pb-4">
+                      {result.type === "article" && (
+                        <div>
+                          <h2 className="text-lg font-bold">{result.title}</h2>
+                          <p>{result.content}</p>
+                        </div>
+                      )}
+                      {result.type === "image" && (
+                        <div>
+                          <img
+                            src={result.url}
+                            alt={result.alt}
+                            className="w-full h-auto rounded"
+                          />
+                          <p>{result.caption}</p>
+                        </div>
+                      )}
+                      {result.type === "video" && (
+                        <div>
+                          <video
+                            controls
+                            src={result.url}
+                            className="w-full h-auto rounded"
+                          ></video>
+                          <p>{result.caption}</p>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-
-          <div className="w-full max-w-2xl mx-auto bg-white dark:bg-inbut p-4 rounded-3xl shadow-md relative">
+          )}
+          <div className="w-full max-w-3xl mx-auto bg-white dark:bg-inbut p-4 rounded-3xl shadow-md relative">
             <input
               type="text"
               value={query}
@@ -142,41 +132,50 @@ export default function Home() {
               onClick={handleSearch}
               className="absolute right-2 top-1/2 transform -translate-y-1/2 w-8 h-8 rounded-full bg-white text-white flex items-center justify-center hover:bg-gray-400"
             >
+              {/* <svg class="animate-spin motion-reduce:hidden " width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><path stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m12 5 6 6m-6-6-6 6m6-6v14"/></svg> */}
               <img src="/arrow.svg" alt="Search" className="w-6 h-6" />
             </button>
 
-            <div className="flex space-x-4 mt-4">
+            <div className="flex space-x-4 mt-4 items-center">
               <div
                 onClick={() => setFilter("all")}
                 className={`cursor-pointer ${
-                  filter === "all" ? "border-2 border-blue-500" : ""
+                  filter === "all"
+                    ? "flex justify-center items-center bg-background rounded-lg h-8 w-8"
+                    : "flex justify-center items-center hover:bg-zinc-800 rounded-lg h-8 w-8"
                 }`}
               >
-                <img src="/all.png" alt="All" className="w-5 h-5" />
+                <img src="/all.svg" alt="All" className="w-6 h-6" />
               </div>
               <div
                 onClick={() => setFilter("articles")}
                 className={`cursor-pointer ${
-                  filter === "articles" ? "border-2 border-blue-500" : ""
+                  filter === "articles"
+                    ? "flex justify-center items-center bg-background rounded-lg h-8 w-8"
+                    : "flex justify-center items-center hover:bg-zinc-800 rounded-lg h-8 w-8"
                 }`}
               >
-                <img src="/articles.png" alt="Articles" className="w-5 h-5" />
+                <img src="/file.svg" alt="Articles" className="w-6 h-6" />
               </div>
               <div
                 onClick={() => setFilter("images")}
                 className={`cursor-pointer ${
-                  filter === "images" ? "border-2 border-blue-500" : ""
+                  filter === "images"
+                    ? "flex justify-center items-center bg-background rounded-lg h-8 w-8"
+                    : "flex justify-center items-center hover:bg-zinc-800 rounded-lg h-8 w-8"
                 }`}
               >
-                <img src="/gallery.svg" alt="Images" className="w-5 h-5" />
+                <img src="/gallery.svg" alt="Images" className="w-6 h-6" />
               </div>
               <div
                 onClick={() => setFilter("videos")}
                 className={`cursor-pointer ${
-                  filter === "videos" ? "border-2 border-blue-500" : ""
+                  filter === "videos"
+                    ? "flex justify-center items-center bg-background rounded-lg h-8 w-8"
+                    : "flex justify-center items-center hover:bg-zinc-800 rounded-lg h-8 w-8"
                 }`}
               >
-                <img src="/videos.png" alt="Videos" className="w-5 h-5" />
+                <img src="/videos.svg" alt="Videos" className="w-7 h-7" />
               </div>
             </div>
           </div>
