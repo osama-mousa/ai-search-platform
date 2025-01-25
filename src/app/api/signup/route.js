@@ -14,7 +14,6 @@ export async function POST(req) {
         { status: 400 }
       );
     }
-
     // تشفير كلمة المرور
     const hashedPassword = await bcrypt.hash(password, 10);
 
