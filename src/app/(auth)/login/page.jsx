@@ -17,10 +17,8 @@ export default function LoginPage() {
       });
       console.log(response);
       if (response.status === 200) {
-        alert("Login successful");
         router.push('/');
       } else {
-        alert(`Error: ${response.data.message}`);
         setError(response.data.message || "Something went wrong");
       }
     } catch (err) {

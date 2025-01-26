@@ -6,7 +6,11 @@ export async function POST(req) {
   const body = await req.json();
   const { email, password } = body;
 
-  const user = await prisma.user.findUnique({ where: { email } });
+  const user = await prisma.user.findUnique({
+    where: { email },
+    select: { id: true, name: true, email: true, image: true },
+  });
+  
   if (!user) {
     return NextResponse.json({ message: "User not found." }, { status: 400 });
   }

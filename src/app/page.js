@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import axios from "axios";
+import Header from "@/components/Header";
 
 export default function Home() {
   const [query, setQuery] = useState("");
@@ -58,23 +59,7 @@ export default function Home() {
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col bg-gray-100 dark:bg-background text-Sidebar dark:text-gray-100 p-2">
-        <header className="flex justify-between items-center mb-6">
-          <h1 className="text-xl font-bold text-string">AI Search Platform</h1>
-          <div className="mt-0 flex text-sm text-center justify-center">
-            <Link
-              href="/login"
-              className="bg-white text-black p-2 mx-1 h-10 w-20 rounded-full hover:bg-slate-100"
-            >
-              Log in
-            </Link>
-            <Link
-              href="/signup"
-              className="bg-background border border-inbut text-white p-2 mx-1 h-10 w-20 rounded-full hover:bg-zinc-800"
-            >
-              Sign up
-            </Link>
-          </div>
-        </header>
+        <Header />
 
         <main className="flex-1 mt-28">
           {/* Display Results Above the Search Input */}
