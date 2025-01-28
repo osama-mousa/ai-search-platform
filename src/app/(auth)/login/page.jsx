@@ -2,6 +2,8 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import Link from 'next/link';
+
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -28,8 +30,8 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100 dark:bg-gray-900">
-      <div className="bg-white dark:bg-gray-800 p-8 rounded shadow-md w-full max-w-md">
+    <div className="flex justify-center items-center h-screen bg-gray-100 dark:bg-background">
+      <div className="bg-white dark:bg-input p-8 rounded shadow-md w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6">Login</h2>
         {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
         <form onSubmit={handleSubmit}>
@@ -53,10 +55,16 @@ export default function LoginPage() {
               required
             />
           </div>
-          <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded">
+          <button type="submit" className="w-full bg-zinc-900 hover:bg-zinc-800 text-white p-2 rounded">
             Login
           </button>
         </form>
+        <Link
+          href="/signup"
+          className="flex items-center justify-center text-center text-zinc-200 hover:text-white mt-5 h-10 w-full"
+        >
+          Sign Up
+        </Link>
       </div>
     </div>
   );
