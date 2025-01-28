@@ -10,7 +10,7 @@ export default {
       colors: {
         background: "#212121",
         Sidebar: "#171717",
-        inbut: "#2f2f2f",
+        input: "#2f2f2f",
         string:"#b4b4b4",
         placeholder:"#ececec",
         foreground: "var(--foreground)",
