@@ -1,59 +1,74 @@
-import prisma from '@/app/lib/prisma';
-import bcrypt from 'bcryptjs';
-import { promises as fs } from 'fs';
-import path from 'path';
-import multer from 'multer';
-import { v4 as uuidv4 } from 'uuid'; // لتوليد UUID لضمان فريدة الاسم
-
-export const config = {
-  api: {
-    bodyParser: false, // إيقاف المعالج الافتراضي
-  },
-};
-
-// إعداد تخزين Multer
-const storage = multer.diskStorage({
-  destination: 'public/uploads/',
-  filename: (req, file, cb) => {
-    const uniqueName = `${uuidv4()}-${file.originalname}`;
-    cb(null, uniqueName);
-  },
-});
-
-const upload = multer({ storage });
+import prisma from "@/app/lib/prisma";
+import bcrypt from "bcryptjs";
+import { NextResponse } from "next/server";
 
 export async function POST(req) {
-  if (req.method === 'POST') {
-    upload.single('image')(req, {}, async (err) => {
-      if (err) {
-        console.error('Error uploading file:', err);
-        return NextResponse.json({ message: "Error uploading image" }, { status: 500 });
-      }
+  try {
+    // التحقق من وجود محتوى في الطلب
+    const contentType = req.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/json")) {
+      return NextResponse.json(
+        { message: "Invalid content type, expected JSON" },
+        { status: 400 }
+      );
+    }
 
-      const { name, email, password } = req.body;
+    // قراءة البيانات من الطلب
+    const body = await req.json();
 
-      // تحقق إذا كان البريد الإلكتروني موجودًا
-      const existingUser = await prisma.user.findUnique({ where: { email } });
-      if (existingUser) return NextResponse.json({ message: "Email already registered." }, { status: 400 });
+    const { name, email, password, confirmPassword, image } = body;
 
-      // تشفير كلمة المرور
-      const hashedPassword = await bcrypt.hash(password, 10);
+    // التحقق من الحقول المطلوبة
+    if (!name || !email || !password || !confirmPassword) {
+      return NextResponse.json(
+        { message: "All fields are required" },
+        { status: 400 }
+      );
+    }
 
-      let imageUrl = null;
-      if (req.file) {
-        const filePath = path.join('public/uploads', req.file.filename);
-        await fs.rename(req.file.path, filePath);
-        imageUrl = `/uploads/${req.file.filename}`;
-      }
+    // التحقق من تطابق كلمة المرور
+    if (password !== confirmPassword) {
+      return NextResponse.json(
+        { message: "Passwords do not match" },
+        { status: 400 }
+      );
+    }
 
-      // حفظ المستخدم في قاعدة البيانات
-      const newUser = await prisma.user.create({
-        data: { name, email, password: hashedPassword, image: imageUrl },
-      });
+    // التحقق من وجود المستخدم بالفعل
+    const existingUser = await prisma.user.findUnique({ where: { email } });
+    if (existingUser) {
+      return NextResponse.json(
+        { message: "Email already registered" },
+        { status: 400 }
+      );
+    }
 
-      return NextResponse.json(newUser, { status: 201 });
+    // تشفير كلمة المرور
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // حفظ المستخدم الجديد في قاعدة البيانات
+    const newUser = await prisma.user.create({
+      data: {
+        name,
+        email,
+        password: hashedPassword,
+        image: image || null, // حفظ الصورة إذا كانت موجودة
+      },
     });
-  } else {
-    return NextResponse.json({ message: "Method not allowed" }, { status: 405 });
+
+    // حذف كلمة المرور قبل إرسال الاستجابة
+    const { password: _, ...userWithoutPassword } = user;
+
+    return NextResponse.json({ message: "Sign Up successful", newUser: userWithoutPassword }, { status: 201 });
+  } catch (error) {
+    console.error("Error in signup API:", error);
+    return NextResponse.json(
+      { message: "Internal Server Error" },
+      { status: 500 }
+    );
   }
+}
+
+export function GET() {
+  return NextResponse.json({ message: "Method not allowed" }, { status: 405 });
 }
