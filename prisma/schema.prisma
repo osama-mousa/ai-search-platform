@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id          String    @id @default(cuid())
+  id          Int       @id @default(autoincrement())
   name        String
   email       String    @unique
   password    String
@@ -20,8 +20,8 @@ model User {
 }
 
 model Account {
-  id                 String  @id @default(cuid())
-  userId             String
+  id                 Int      @id @default(autoincrement())
+  userId             Int
   type               String
   provider           String
   providerAccountId  String
@@ -39,17 +39,17 @@ model Account {
 }
 
 model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
+  id           Int       @id @default(autoincrement())
+  sessionToken String    @unique
+  userId       Int
   expires      DateTime
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model VerificationToken {
-  id         String   @id @default(cuid())
+  id         Int       @id @default(autoincrement())
   identifier String
-  token      String   @unique
+  token      String    @unique
   expires    DateTime
 }
