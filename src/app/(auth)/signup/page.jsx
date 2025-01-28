@@ -108,7 +108,7 @@ export default function SignUpPage() {
         </button>
         <Link
           href="/login"
-          className="flex items-center justify-center text-center text-zinc-200 hover:text-zinc-50 p-2 mx-1 h-10 w-full"
+          className="flex items-center justify-center text-center text-zinc-200 hover:text-white mt-5 h-10 w-full"
         >
           Log in
         </Link>
