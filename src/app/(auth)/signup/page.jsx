@@ -57,7 +57,7 @@ export default function SignUpPage() {
             placeholder="Name"
             value={formData.name}
             onChange={handleChange}
-            className="border w-full p-2 mb-4 rounded"
+            className="border text-zinc-900 w-full p-2 mb-4 rounded"
             required
           />
           <input
@@ -66,7 +66,7 @@ export default function SignUpPage() {
             placeholder="Email"
             value={formData.email}
             onChange={handleChange}
-            className="border w-full p-2 mb-4 rounded"
+            className="border text-zinc-900 w-full p-2 mb-4 rounded"
             required
           />
           <input
@@ -75,7 +75,7 @@ export default function SignUpPage() {
             placeholder="Password"
             value={formData.password}
             onChange={handleChange}
-            className="border w-full p-2 mb-4 rounded"
+            className="border text-zinc-900 w-full p-2 mb-4 rounded"
             required
           />
           <input
@@ -84,7 +84,7 @@ export default function SignUpPage() {
             placeholder="Confirm Password"
             value={formData.confirmPassword}
             onChange={handleChange}
-            className="border w-full p-2 mb-4 rounded"
+            className="border text-zinc-900 w-full p-2 mb-4 rounded"
             required
           />
           <button
