@@ -31,6 +31,9 @@ export default function SignUpPage() {
       return;
     }
 
+    setLoading(true);
+    setError(null);
+
     try {
       const response = await fetch("/api/signup", {
         method: "POST",
@@ -42,6 +45,8 @@ export default function SignUpPage() {
       console.log("User registered successfully");
     } catch (err) {
       setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
