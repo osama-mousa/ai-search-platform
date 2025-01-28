@@ -105,13 +105,13 @@ export default function Home() {
               </div>
             </div>
           )}
-          <div className="w-full max-w-3xl mx-auto bg-white dark:bg-inbut p-4 rounded-3xl shadow-md relative">
+          <div className="w-full max-w-3xl mx-auto bg-white dark:bg-input p-4 rounded-3xl shadow-md relative">
             <input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Ask me anything..."
-              className="p-2 rounded w-full bg-gray-100 dark:bg-inbut focus:outline-none pr-12" // إضافة "pr-12" لترك مساحة للزر
+              className="p-2 rounded w-full bg-gray-100 dark:bg-input focus:outline-none pr-12" // إضافة "pr-12" لترك مساحة للزر
             />
             <button
               onClick={handleSearch}
