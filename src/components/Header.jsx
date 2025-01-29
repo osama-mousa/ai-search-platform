@@ -1,43 +1,44 @@
+"use client";
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import axios from 'axios';
+import { useSession, signOut } from "next-auth/react";
 
 export default function Header() {
-    const [user, setUser] = useState(null); // حالة المستخدم (null إذا لم يكن مسجل الدخول)
-    const [loading, setLoading] = useState(true); // لتحميل البيانات
+    const { data: session, status } = useSession();
+    // const [user, setUser] = useState(null); // حالة المستخدم (null إذا لم يكن مسجل الدخول)
+    // const [loading, setLoading] = useState(true); // لتحميل البيانات
 
-    useEffect(() => {
-        // استرداد بيانات المستخدم من API
-        const fetchUser = async () => {
-            try {
-                const response = await axios.get('/api/user'); // استدعاء API لجلب بيانات المستخدم
-                setUser(response.data); // تحديث حالة المستخدم
-            } catch (error) {
-                console.error('Error fetching user:', error);
-            } finally {
-                setLoading(false); // إنهاء التحميل
-            }
-        };
+    // useEffect(() => {
+    //     // استرداد بيانات المستخدم من API
+    //     const fetchUser = async () => {
+    //         try {
+    //             const response = await axios.get('/api/user'); // استدعاء API لجلب بيانات المستخدم
+    //             setUser(response.data); // تحديث حالة المستخدم
+    //         } catch (error) {
+    //             console.error('Error fetching user:', error);
+    //         } finally {
+    //             setLoading(false); // إنهاء التحميل
+    //         }
+    //     };
 
-        fetchUser();
-    }, []);
+    //     fetchUser();
+    // }, []);
+
+    if (status === "loading") {
+        return <div>Loading...</div>;
+    }
 
     return (
         <header className="flex justify-between items-center mb-6">
             <h1 className="text-xl font-bold text-string">AI Search Platform</h1>
             <div className="mt-0 flex text-sm text-center justify-center">
-                {loading ? (
-                    <span className="text-white">Loading...</span> // عرض حالة التحميل
-                ) : user ? (
-                    // عرض صورة الملف الشخصي إذا كان المستخدم مسجل الدخول
-                    <div className="flex items-center">
-                        {user?.image ? (
-                            <img src={user.image} alt="Profile" className="h-10 w-10 rounded-full" />
-                        ) : (
-                            <DefaultProfileIcon className="h-10 w-10 rounded-full" />
-                        )}
-
-                        <span className="ml-2 text-white">{user.name}</span> {/* عرض اسم المستخدم */}
+                {session?.user ? (
+                    <div className="flex items-center gap-4">
+                        <img src={session.user.image} alt="Profile" className="w-10 h-10 rounded-full" />
+                        <button onClick={() => signOut()} className="bg-red-500 px-4 py-2 rounded">
+                            Logout
+                        </button>
                     </div>
                 ) : (
                     // عرض أزرار تسجيل الدخول والتسجيل إذا لم يكن مسجل الدخول
