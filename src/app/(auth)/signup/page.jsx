@@ -6,18 +6,27 @@ import { signIn } from "next-auth/react";
 import Link from 'next/link';
 import axios from "axios";
 import { FcGoogle } from 'react-icons/fc';
+import { useEffect } from "react";
+import { useSession } from "next-auth/react";
 
 
 export default function SignUpPage() {
+  const { data: session } = useSession();
+  const router = useRouter();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
-
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (session) {
+      router.push("/"); // إعادة توجيه المستخدم إذا كان مسجلاً الدخول
+    }
+  }, [session, router]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -108,7 +117,7 @@ export default function SignUpPage() {
         </button>
         <Link
           href="/login"
-          className="flex items-center justify-center text-center text-zinc-200 hover:text-zinc-50 p-2 mx-1 h-10 w-full"
+          className="flex items-center justify-center text-center text-zinc-200 hover:text-white mt-5 h-10 w-full"
         >
           Log in
         </Link>
