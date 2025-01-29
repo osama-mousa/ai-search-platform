@@ -65,6 +65,12 @@ export default function SignUpPage() {
         <h2 className="text-2xl font-bold mb-6">Sign Up</h2>
         {error && <div className="text-red-500 mb-4">{error}</div>}
         <form onSubmit={handleSubmit}>
+          <button
+            onClick={() => signIn("google")}
+            className="w-full bg-green-700 hover:bg-green-600 text-white p-2 rounded flex items-center justify-center mb-4"
+          >
+            <FcGoogle className="mr-2" /> Sign Up with Google
+          </button>
           <input
             type="text"
             name="name"
@@ -109,12 +115,7 @@ export default function SignUpPage() {
             {loading ? "Signing Up..." : "Sign Up"}
           </button>
         </form>
-        <button
-          onClick={() => signIn("google")}
-          className="w-full bg-zinc-900 hover:bg-zinc-800 text-white p-2 rounded flex items-center justify-center"
-        >
-          <FcGoogle className="mr-2" /> Sign Up with Google
-        </button>
+
         <Link
           href="/login"
           className="flex items-center justify-center text-center text-zinc-200 hover:text-white mt-5 h-10 w-full"
