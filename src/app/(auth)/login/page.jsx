@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Link from 'next/link';
+import { useSession } from "next-auth/react";
+import { useEffect } from "react";
 
 
 export default function LoginPage() {
@@ -10,6 +12,14 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const router = useRouter();
   const [error, setError] = useState(null);
+  const { data: session } = useSession();
+
+  useEffect(() => {
+    if (session) {
+      router.push("/"); // إعادة توجيه المستخدم إذا كان مسجلاً الدخول
+    }
+  }, [session, router]);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
