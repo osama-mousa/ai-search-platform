@@ -49,7 +49,7 @@ export default function SignUpPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-
+      router.push("/login");
       if (!response.ok) throw new Error(await response.text());
       console.log("User registered successfully");
     } catch (err) {
