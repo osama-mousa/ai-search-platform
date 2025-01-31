@@ -57,7 +57,7 @@ export async function POST(req) {
     });
 
     // حذف كلمة المرور قبل إرسال الاستجابة
-    const { password: _, ...userWithoutPassword } = user;
+    const { password: _, ...userWithoutPassword } = newUser;
 
     return NextResponse.json({ message: "Sign Up successful", newUser: userWithoutPassword }, { status: 201 });
   } catch (error) {
