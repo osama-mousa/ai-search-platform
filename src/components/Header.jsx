@@ -31,7 +31,7 @@ export default function Header() {
 
     return (
         <header className="flex justify-between items-center mb-6">
-            <h1 className="text-xl font-bold text-string">AI Search Platform</h1>
+            <h1 className="text-xl font-bold text-string">Dinosaur</h1>
             <div className="mt-0 flex text-sm text-center justify-center">
                 {session?.user ? (
                     <div className="flex items-center gap-4">
