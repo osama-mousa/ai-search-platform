@@ -44,7 +44,7 @@ export default function Header() {
                     // عرض أزرار تسجيل الدخول والتسجيل إذا لم يكن مسجل الدخول
                     <>
                         <Link
-                            href="/login"
+                            href="/sign_in"
                             className="bg-white text-black p-2 mx-1 h-10 w-20 rounded-full hover:bg-slate-100"
                         >
                             Log in

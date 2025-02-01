@@ -24,7 +24,7 @@ export default function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/api/login", { email, password }, {
+      const response = await axios.post("/api/sign_in", { email, password }, {
         headers: { 'Content-Type': 'application/json' },
       });
       if (response.status === 200) {
