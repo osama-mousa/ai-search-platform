@@ -19,7 +19,7 @@ export async function POST(req) {
     const { name, email, password, confirmPassword, image } = body;
 
     // التحقق من الحقول المطلوبة
-    if (!name || !email || !password || !confirmPassword) {
+    if (!email || !password || !confirmPassword) {
       return NextResponse.json(
         { message: "All fields are required" },
         { status: 400 }
