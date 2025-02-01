@@ -8,10 +8,10 @@ export default {
   theme: {
     extend: {
       colors: {
-        primaryColor: "#212121",
+        primaryColor: "#292a2d", // #292a2d , #212121
         currentColor: "#525252",//#525252 ,#2f2f2f
         buttonColor: "#4338ca",
-        linkColor: "#3730a3",
+        linkColor: "#3740f0",
         Sidebar: "#171717",
         string: "#b4b4b4",
         placeholder: "#ececec",
