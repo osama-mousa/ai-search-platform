@@ -8,11 +8,13 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "#212121",
+        primaryColor: "#212121",
+        currentColor: "#525252",//#525252 ,#2f2f2f
+        buttonColor: "#4338ca",
+        linkColor: "#3730a3",
         Sidebar: "#171717",
-        input: "#2f2f2f",
-        string:"#b4b4b4",
-        placeholder:"#ececec",
+        string: "#b4b4b4",
+        placeholder: "#ececec",
         foreground: "var(--foreground)",
       },
     },
