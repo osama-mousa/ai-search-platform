@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -17,6 +18,10 @@ export default {
         string: "#b4b4b4",
         placeholder: "#ececec",
         foreground: "var(--foreground)",
+      },
+      fontFamily: {
+        customFont: ['"Custom Font"', "sans-serif"],
+        // Add more custom font families as needed
       },
     },
   },
