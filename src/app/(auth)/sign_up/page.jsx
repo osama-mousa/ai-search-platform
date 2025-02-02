@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import Link from 'next/link';
 import { AiOutlineEye, AiOutlineEyeInvisible, AiOutlineExclamationCircle } from "react-icons/ai";
 import { FaExclamationCircle, FaTimes } from "react-icons/fa"; // استيراد الأيقونات
+import { CiLock } from "react-icons/ci";
 
 export default function SignUpPage() {
   const { data: session } = useSession();
@@ -105,7 +106,7 @@ export default function SignUpPage() {
             <AiOutlineExclamationCircle className="text-xl text-red-500 m-1" /> {/* أيقونة الخطأ */}
             <span>{serverError}</span> {/* نص الرسالة */}
             <button
-              onClick={() => setServerError("")} 
+              onClick={() => setServerError("")}
               className="hover:bg-neutral-800 rounded-full p-1 transition-colors"
             >
               <FaTimes className="text-lg" /> {/* أيقونة الإغلاق */}
@@ -124,9 +125,8 @@ export default function SignUpPage() {
               placeholder="Email address"
               value={formData.email}
               onChange={handleChange}
-              className={`border bg-transparent text-neutral-100 w-full p-3 px-5 rounded-xl ${
-                errors.email ? 'border-red-500' : 'border-currentColor focus:border-buttonColor'
-              }`}
+              className={`border bg-transparent text-neutral-100 w-full p-3 px-5 rounded-xl ${errors.email ? 'border-red-500' : 'border-currentColor focus:border-buttonColor'
+                }`}
               required
             />
             <div className="h-4 my-1">
@@ -134,15 +134,15 @@ export default function SignUpPage() {
             </div>
           </div>
           <div className="relative">
+            <CiLock size={20} className="absolute left-3 top-4 text-gray-500 dark:text-gray-400" />
             <input
               type={showPassword ? "text" : "password"}
               name="password"
               placeholder="Password"
               value={formData.password}
               onChange={handleChange}
-              className={`border bg-transparent text-neutral-100 w-full p-3 px-5 rounded-xl ${
-                errors.password ? 'border-red-500' : 'border-currentColor focus:border-buttonColor'
-              }`}
+              className={`border bg-transparent pl-10 text-neutral-100 w-full p-3 px-5 rounded-xl ${errors.password ? 'border-red-500' : 'border-currentColor focus:border-buttonColor'
+                }`}
               required
             />
             <button
@@ -157,15 +157,15 @@ export default function SignUpPage() {
             </div>
           </div>
           <div className="relative">
+          <CiLock size={20} className="absolute left-3 top-4 text-gray-500 dark:text-gray-400" />
             <input
               type={showConfirmPassword ? "text" : "password"}
               name="confirmPassword"
               placeholder="Confirm Password"
               value={formData.confirmPassword}
               onChange={handleChange}
-              className={`border bg-transparent text-neutral-100 w-full p-3 px-5 rounded-xl ${
-                errors.confirmPassword ? 'border-red-500' : 'border-currentColor focus:border-buttonColor'
-              }`}
+              className={`border bg-transparent pl-10 text-neutral-100 w-full p-3 px-5 rounded-xl ${errors.confirmPassword ? 'border-red-500' : 'border-currentColor focus:border-buttonColor'
+                }`}
               required
             />
             <button
