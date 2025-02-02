@@ -50,7 +50,7 @@ export default function Header() {
                             Log in
                         </Link>
                         <Link
-                            href="/signup"
+                            href="/sign_up"
                             className="bg-background border border-inbut text-white p-2 mx-1 h-10 w-20 rounded-full hover:bg-zinc-800"
                         >
                             Sign up
