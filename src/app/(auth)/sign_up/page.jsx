@@ -147,7 +147,7 @@ export default function SignUpPage() {
             />
             <button
               type="button"
-              className="absolute right-3 top-5 text-gray-500 dark:text-gray-400"
+              className="absolute right-3 top-4 text-gray-500 dark:text-gray-400"
               onClick={() => setShowPassword(!showPassword)}
             >
               {showPassword ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
@@ -170,7 +170,7 @@ export default function SignUpPage() {
             />
             <button
               type="button"
-              className="absolute right-3 top-5 text-gray-500 dark:text-gray-400"
+              className="absolute right-3 top-4 text-gray-500 dark:text-gray-400"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
             >
               {showConfirmPassword ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
