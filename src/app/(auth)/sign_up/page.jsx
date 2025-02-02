@@ -98,7 +98,7 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100 dark:bg-primaryColor">
+    <div className="flex justify-center items-center h-screen bg-gray-100 dark:bg-primaryColor font-sans">
       {/* Toast Notification لرسالة الخطأ */}
       {serverError && (
         <div className="fixed top-10 left-0 right-0 flex justify-center">
@@ -116,7 +116,13 @@ export default function SignUpPage() {
       )}
 
       <div className="bg-transparent dark:bg-transparent p-3 px-5 rounded-xl w-full max-w-sm">
-        <h2 className="text-2xl font-bold mb-6">Sign Up</h2>
+        <div className="flex justify-between w-full items-center">
+          <img src="/dinosaur.svg" className="h-40 text-left" alt="" />
+          <div className="justify-between">
+          <h1 className="text-4xl font-bold text-indigo-600">Dinosaur</h1>
+          {/* <h2 className="text-xl font-bold text-right">Sign Up</h2> */}
+          </div>
+        </div>
         <form onSubmit={handleSubmit}>
           <div>
             <input
@@ -125,7 +131,7 @@ export default function SignUpPage() {
               placeholder="Email address"
               value={formData.email}
               onChange={handleChange}
-              className={`border bg-transparent text-neutral-100 w-full p-3 px-5 rounded-xl ${errors.email ? 'border-red-500' : 'border-currentColor focus:border-buttonColor'
+              className={`border focus:outline-none placeholder-currentColor bg-transparent text-neutral-100 w-full p-3 px-5 rounded-xl ${errors.email ? 'border-red-500' : 'border-currentColor focus:border-buttonColor'
                 }`}
               required
             />
@@ -134,14 +140,14 @@ export default function SignUpPage() {
             </div>
           </div>
           <div className="relative">
-            <CiLock size={20} className="absolute left-3 top-4 text-gray-500 dark:text-gray-400" />
+            <CiLock size={20} className="absolute left-3 top-4 text-currentColor dark:text-currentColor" />
             <input
               type={showPassword ? "text" : "password"}
               name="password"
               placeholder="Password"
               value={formData.password}
               onChange={handleChange}
-              className={`border bg-transparent pl-10 text-neutral-100 w-full p-3 px-5 rounded-xl ${errors.password ? 'border-red-500' : 'border-currentColor focus:border-buttonColor'
+              className={`border focus:outline-none placeholder-currentColor bg-transparent pl-10 text-neutral-100 w-full p-3 px-5 rounded-xl ${errors.password ? 'border-red-500' : 'border-currentColor focus:border-buttonColor'
                 }`}
               required
             />
@@ -150,21 +156,21 @@ export default function SignUpPage() {
               className="absolute right-3 top-4 text-gray-500 dark:text-gray-400"
               onClick={() => setShowPassword(!showPassword)}
             >
-              {showPassword ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
+              {showPassword ? <AiOutlineEyeInvisible size={20} className="text-neutral-100" /> : <AiOutlineEye size={20} className="text-neutral-100" />}
             </button>
             <div className="h-4 my-1">
               {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
             </div>
           </div>
           <div className="relative">
-          <CiLock size={20} className="absolute left-3 top-4 text-gray-500 dark:text-gray-400" />
+            <CiLock size={20} className="absolute left-3 top-4 text-currentColor dark:text-currentColor" />
             <input
               type={showConfirmPassword ? "text" : "password"}
               name="confirmPassword"
-              placeholder="Confirm Password"
+              placeholder="Confirm password"
               value={formData.confirmPassword}
               onChange={handleChange}
-              className={`border bg-transparent pl-10 text-neutral-100 w-full p-3 px-5 rounded-xl ${errors.confirmPassword ? 'border-red-500' : 'border-currentColor focus:border-buttonColor'
+              className={`border focus:outline-none placeholder-currentColor bg-transparent pl-10 text-neutral-100 w-full p-3 px-5 rounded-xl ${errors.confirmPassword ? 'border-red-500' : 'border-currentColor focus:border-buttonColor'
                 }`}
               required
             />
@@ -173,7 +179,7 @@ export default function SignUpPage() {
               className="absolute right-3 top-4 text-gray-500 dark:text-gray-400"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
             >
-              {showConfirmPassword ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
+              {showConfirmPassword ? <AiOutlineEyeInvisible size={20} className="text-neutral-100" /> : <AiOutlineEye size={20} className="text-neutral-100" />}
             </button>
             <div className="h-4 my-1">
               {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword}</p>}
@@ -186,7 +192,7 @@ export default function SignUpPage() {
                   type="checkbox"
                   checked={agreeToTerms}
                   onChange={handleCheckboxChange}
-                  className="peer h-5 w-5 cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border border-slate-300 checked:bg-buttonColor checked:border-slate-800"
+                  className="peer h-5 w-5 cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border focus:outline-none border-slate-300 checked:bg-buttonColor checked:border-slate-800"
                   id="check-with-link"
                 />
                 <span className="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
@@ -206,11 +212,11 @@ export default function SignUpPage() {
                   </svg>
                 </span>
               </label>
-              <label className="cursor-pointer ml-2 text-slate-100 text-sm" htmlFor="check-with-link">
+              <label className="cursor-pointer ml-2 text-neutral-200 text-sm" htmlFor="check-with-link">
                 <p>
                   I confirm that I have read, consent and agree to Dinosaur's &nbsp;
                   <a href="#" className="font-medium text-linkColor">
-                    Terms of Use <span className="text-slate-100">and</span> Privacy Policy
+                    Terms of Use <span className="text-neutral-200">and</span> Privacy Policy
                   </a>
                   .
                 </p>
