@@ -5,6 +5,7 @@ import axios from "axios";
 import Link from 'next/link';
 import { useSession, signIn } from "next-auth/react";
 import { FcGoogle } from "react-icons/fc";
+import { HiOutlineMail } from "react-icons/hi";
 import { AiOutlineEye, AiOutlineEyeInvisible, AiOutlineExclamationCircle } from "react-icons/ai";
 import { FaTimes } from "react-icons/fa";
 import { CiLock } from "react-icons/ci";
@@ -89,7 +90,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100 dark:bg-primaryColor">
+    <div className="flex justify-center items-center h-screen bg-gray-100 dark:bg-primaryColor font-sans">
       {serverError && (
         <div className="fixed top-10 left-0 right-0 flex justify-center">
           <div className="bg-alertColor text-white px-6 py-3 rounded-lg shadow-lg animate-slide-down flex items-center space-x-4">
@@ -106,18 +107,26 @@ export default function LoginPage() {
       )}
 
       <div className="bg-transparent dark:bg-transparent p-3 px-5 rounded-xl w-full max-w-sm">
-        <h2 className="text-2xl font-bold mb-6">Log in</h2>
+        <div className="flex justify-between w-full items-center">
+          <img src="/dinosaur.svg" className="h-40 text-left" alt="" />
+          <div className="justify-between">
+            <h1 className="text-4xl font-bold text-indigo-600">Dinosaur</h1>
+            {/* <h2 className="text-xl font-bold text-right">Sign Up</h2> */}
+          </div>
+        </div>
+        {/* <h2 className="text-2xl font-bold mb-6">Log in</h2> */}
         {error && <div className="text-red-500 mb-4">{error}</div>}
         <div className="xl:gap-16">
           <form onSubmit={handleSubmit}>
-            <div>
+            <div className="relative">
+              <HiOutlineMail size={20} className="absolute left-3 top-4 text-currentColor dark:text-currentColor" />
               <input
                 type="email"
                 name="email"
                 placeholder="Email address"
                 value={formData.email}
                 onChange={handleChange}
-                className={`border bg-transparent text-neutral-100 w-full p-3 px-5 rounded-xl ${errors.email ? 'border-red-500' : 'border-currentColor focus:border-buttonColor'
+                className={`border focus:outline-none placeholder-currentColor bg-transparent pl-10 text-neutral-100 w-full p-3 px-5 rounded-xl ${errors.email ? 'border-red-500' : 'border-currentColor focus:border-buttonColor'
                   }`}
                 required
               />
@@ -126,14 +135,14 @@ export default function LoginPage() {
               </div>
             </div>
             <div className="relative">
-            <CiLock size={20} className="absolute left-3 top-4 text-gray-500 dark:text-gray-400" />
+              <CiLock size={20} className="absolute left-3 top-4 text-currentColor dark:text-currentColor" />
               <input
                 type={showPassword ? "text" : "password"}
                 name="password"
                 placeholder="Password"
                 value={formData.password}
                 onChange={handleChange}
-                className={`border bg-transparent pl-10 text-neutral-100 w-full p-3 px-5 rounded-xl ${errors.password ? 'border-red-500' : 'border-currentColor focus:border-buttonColor'
+                className={`border focus:outline-none placeholder-currentColor bg-transparent pl-10 text-neutral-100 w-full p-3 px-5 rounded-xl ${errors.password ? 'border-red-500' : 'border-currentColor focus:border-buttonColor'
                   }`}
                 required
               />
@@ -142,7 +151,7 @@ export default function LoginPage() {
                 className="absolute right-3 top-4 text-gray-500 dark:text-gray-400"
                 onClick={() => setShowPassword(!showPassword)}
               >
-                {showPassword ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
+                {showPassword ? <AiOutlineEyeInvisible size={20} className="text-neutral-100" /> : <AiOutlineEye size={20} className="text-neutral-100" />}
               </button>
               <div className="h-4 my-1">
                 {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
@@ -166,6 +175,21 @@ export default function LoginPage() {
           <Link href="/sign_up" className="h-10 text-right">
             Sign Up
           </Link>
+        </div>
+        <div className="flex w-full justify-between items-center text-currentColor">
+          <hr className="border-1 w-full border-currentColor text-left" />
+          <p className="mx-3 text-sm">OR</p>
+          <hr className="border-1 w-full border-currentColor text-right" />
+        </div>
+        {/* تسجيل الدخول عبر Google */}
+        <div className="">
+          <button
+            onClick={() => signIn("google")}
+            className="flex border border-currentColor w-full justify-center items-center bg-transparent hover:bg-neutral-700 text-neutral-100 mt-4 p-3 px-5 rounded-xl"
+          >
+            <FcGoogle size={20} className="mx-2" />
+            <p className="">Log in with Google</p>
+          </button>
         </div>
       </div>
     </div>
