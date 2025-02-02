@@ -13,6 +13,7 @@ export default {
         buttonColor: "#4338ca",
         linkColor: "#3740f0",
         alertColor: "#171717",
+        inputColor: "#404045",
         string: "#b4b4b4",
         placeholder: "#ececec",
         foreground: "var(--foreground)",
