@@ -7,6 +7,7 @@ import { useSession, signIn } from "next-auth/react";
 import { FcGoogle } from "react-icons/fc";
 import { AiOutlineEye, AiOutlineEyeInvisible, AiOutlineExclamationCircle } from "react-icons/ai";
 import { FaTimes } from "react-icons/fa";
+import { CiLock } from "react-icons/ci";
 
 
 export default function LoginPage() {
@@ -35,7 +36,7 @@ export default function LoginPage() {
 
     if (name === "email") {
       if (value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-        // newErrors.email = "Invalid email format";
+        newErrors.email = "Invalid email format";
       } else {
         delete newErrors.email;
       }
@@ -125,13 +126,14 @@ export default function LoginPage() {
               </div>
             </div>
             <div className="relative">
+            <CiLock size={20} className="absolute left-3 top-4 text-gray-500 dark:text-gray-400" />
               <input
                 type={showPassword ? "text" : "password"}
                 name="password"
                 placeholder="Password"
                 value={formData.password}
                 onChange={handleChange}
-                className={`border bg-transparent text-neutral-100 w-full p-3 px-5 rounded-xl ${errors.password ? 'border-red-500' : 'border-currentColor focus:border-buttonColor'
+                className={`border bg-transparent pl-10 text-neutral-100 w-full p-3 px-5 rounded-xl ${errors.password ? 'border-red-500' : 'border-currentColor focus:border-buttonColor'
                   }`}
                 required
               />
