@@ -12,7 +12,7 @@ export default {
         currentColor: "#525252",//#525252 ,#2f2f2f
         buttonColor: "#4338ca",
         linkColor: "#3740f0",
-        Sidebar: "#171717",
+        alertColor: "#171717",
         string: "#b4b4b4",
         placeholder: "#ececec",
         foreground: "var(--foreground)",
