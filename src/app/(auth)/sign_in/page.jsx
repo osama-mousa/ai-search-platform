@@ -152,7 +152,7 @@ export default function LoginPage() {
                 className="w-full bg-indigo-600 hover:bg-buttonColor text-neutral-100 mt-10 p-3 px-5 rounded-xl"
                 disabled={loading}
               >
-                {loading ? "Logging in..." : "Login"}
+                {loading ? "Logging in..." : "Log in"}
               </button>
             </div>
           </form>
