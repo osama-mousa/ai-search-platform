@@ -77,13 +77,16 @@ export default function LoginPage() {
       if (response.status === 200) {
         router.push('/');
       } else {
-        setError(response.data.message || "Something went wrong");
+        setError(response?.data?.message || "Something went wrong");
+        setTimeout(() => setError(""), 5000);
+
       }
     } catch (err) {
       setServerError(err.message);
       setTimeout(() => setServerError(""), 5000);
       console.error("Login error:", err);
       setError(err.response?.data?.message || "Something went wrong");
+      setTimeout(() => setError(""), 5000);
     } finally {
       setLoading(false);
     }
@@ -115,7 +118,7 @@ export default function LoginPage() {
           </div>
         </div>
         {/* <h2 className="text-2xl font-bold mb-6">Log in</h2> */}
-        {error && <div className="text-red-500 mb-4">{error}</div>}
+
         <div className="xl:gap-16">
           <form onSubmit={handleSubmit}>
             <div className="relative">
@@ -154,13 +157,13 @@ export default function LoginPage() {
                 {showPassword ? <AiOutlineEyeInvisible size={20} className="text-neutral-100" /> : <AiOutlineEye size={20} className="text-neutral-100" />}
               </button>
               <div className="h-4 my-1">
-                {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+                {error && <p className="text-red-500 text-sm">{error}</p>}
               </div>
             </div>
             <div>
               <button
                 type="submit"
-                className="w-full bg-indigo-600 hover:bg-buttonColor text-neutral-100 mt-10 p-3 px-5 rounded-xl"
+                className="w-full bg-indigo-600 hover:bg-buttonColor text-neutral-100 mt-5 p-3 px-5 rounded-xl"
                 disabled={loading}
               >
                 {loading ? "Logging in..." : "Log in"}
