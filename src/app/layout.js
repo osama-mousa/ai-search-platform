@@ -1,6 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import SessionProvider from "@/components/SessionProvider";
+import SessionProvider from "@/app/providers/SessionProvider";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/lib/auth";
 
