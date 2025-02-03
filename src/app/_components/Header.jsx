@@ -4,8 +4,7 @@ import Link from 'next/link';
 import axios from 'axios';
 import { useSession, signOut } from "next-auth/react";
 import Image from 'next/image';
-import { FiLogOut } from "react-icons/fi";
-import { IoSettingsOutline } from "react-icons/io5";
+import ProfileMenu from './Menu';
 
 
 export default function Header() {
@@ -60,34 +59,7 @@ export default function Header() {
 
                         {/* Dropdown Menu */}
                         {isDropdownOpen && (
-                            <div className="absolute right-0 mt-60 p-2 w-52 bg-neutral-700 rounded-lg shadow-lg z-50">
-                                <div className="relative">
-                                    <button
-                                        // onClick={}
-                                        className="w-full right-0 text-center px-4 py-3 text-lg text-neutral-100 hover:bg-neutral-600 rounded-lg"
-                                    >
-                                        {session?.user?.name}
-                                    </button>
-                                </div>
-                                <div className="relative">
-                                    <IoSettingsOutline size={20} className="absolute left-3 top-4 text-currentColor dark:text-neutral-100" />
-                                    <button
-                                        // onClick={}
-                                        className="w-full right-0 text-center px-4 py-3 text-lg text-neutral-100 hover:bg-neutral-600 rounded-lg"
-                                    >
-                                        Settings
-                                    </button>
-                                </div>
-                                <div className="relative">
-                                    <FiLogOut size={20} className="absolute left-3 top-4 text-currentColor dark:text-neutral-100" />
-                                    <button
-                                        onClick={() => signOut()}
-                                        className="w-full right-0 text-center px-4 py-3 text-lg text-neutral-100 hover:bg-neutral-600 rounded-lg"
-                                    >
-                                        Log out
-                                    </button>
-                                </div>
-                            </div>
+                            <ProfileMenu />
                         )}
                     </div>
                 ) : (
