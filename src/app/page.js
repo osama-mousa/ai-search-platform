@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import axios from "axios";
-import Header from "@/components/Header";
+import Header from "@/app/_components/Header";
 
 export default function Home() {
   const [query, setQuery] = useState("");
