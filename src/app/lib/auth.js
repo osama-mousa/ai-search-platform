@@ -6,34 +6,34 @@ import prisma from "@/app/lib/prisma";
 import bcrypt from "bcryptjs";
 
 export const authOptions = {
-  adapter: PrismaAdapter(prisma),
+  // adapter: PrismaAdapter(prisma),
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
-    CredentialsProvider({
-      name: "credentials",
-      credentials: {
-        email: { label: "Email", type: "email", placeholder: "user@example.com" },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          throw new Error("Invalid credentials");
-        }
+    // CredentialsProvider({
+    //   name: "credentials",
+    //   credentials: {
+    //     email: { label: "Email", type: "email", placeholder: "user@example.com" },
+    //     password: { label: "Password", type: "password" },
+    //   },
+    //   async authorize(credentials) {
+    //     if (!credentials?.email || !credentials?.password) {
+    //       throw new Error("Invalid credentials");
+    //     }
 
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email },
-        });
+    //     const user = await prisma.user.findUnique({
+    //       where: { email: credentials.email },
+    //     });
 
-        if (!user || !(await bcrypt.compare(credentials.password, user.password))) {
-          throw new Error("Invalid credentials");
-        }
+    //     if (!user || !(await bcrypt.compare(credentials.password, user.password))) {
+    //       throw new Error("Invalid credentials");
+    //     }
 
-        return user;
-      },
-    }),
+    //     return user;
+    //   },
+    // }),
   ],
   session: {
     strategy: "jwt",
