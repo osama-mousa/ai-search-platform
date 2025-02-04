@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from "react";
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import { useSession } from "next-auth/react";
 import Link from 'next/link';
 import { AiOutlineEye, AiOutlineEyeInvisible, AiOutlineExclamationCircle } from "react-icons/ai";
@@ -21,6 +21,8 @@ export default function SignUpPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [serverError, setServerError] = useState("");
+
+  if (session) redirect("/")
 
   useEffect(() => {
     if (session) {
@@ -119,8 +121,8 @@ export default function SignUpPage() {
         <div className="flex justify-between w-full items-center">
           <img src="/dinosaur.svg" className="h-40 text-left" alt="" />
           <div className="justify-between">
-          <h1 className="text-4xl font-bold text-indigo-600">Dinosaur</h1>
-          {/* <h2 className="text-xl font-bold text-right">Sign Up</h2> */}
+            <h1 className="text-4xl font-bold text-indigo-600">Dinosaur</h1>
+            {/* <h2 className="text-xl font-bold text-right">Sign Up</h2> */}
           </div>
         </div>
         <form onSubmit={handleSubmit}>

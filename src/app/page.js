@@ -5,6 +5,8 @@ import Head from "next/head";
 import Link from "next/link";
 import axios from "axios";
 import Header from "@/app/_components/Header";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 export default function Home() {
   const [query, setQuery] = useState("");
@@ -13,6 +15,9 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [searchHistory, setSearchHistory] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { data: session, status } = useSession();
+
+  if(!session) redirect("/sign_in")
 
   useEffect(() => {
     const token = localStorage.getItem("token"); // افترض أن التوكن يتم تخزينه في Local Storage

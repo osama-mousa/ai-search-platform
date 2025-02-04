@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import axios from "axios";
 import Link from 'next/link';
 import { useSession, signIn } from "next-auth/react";
@@ -25,6 +25,8 @@ export default function LoginPage() {
     email: "",
     password: "",
   });
+
+  if (session) redirect("/");
 
   useEffect(() => {
     if (session) {
@@ -190,7 +192,7 @@ export default function LoginPage() {
             onClick={() => signIn("google")}
             className="flex border border-currentColor w-full justify-center items-center bg-transparent hover:bg-neutral-700 text-neutral-100 mt-4 p-3 px-5 rounded-xl"
           >
-            <FcGoogle size={20} className="mx-2" />
+            <img src="/google.svg" size={20} className="h-5 w-5 mx-2" />
             <p className="">Log in with Google</p>
           </button>
         </div>
