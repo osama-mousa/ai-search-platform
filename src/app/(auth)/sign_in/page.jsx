@@ -26,7 +26,7 @@ export default function LoginPage() {
     password: "",
   });
 
-  if (session) redirect("/");
+  // if (session) redirect("/");
 
   useEffect(() => {
     if (session) {
@@ -67,32 +67,29 @@ export default function LoginPage() {
     if (!formData.password) {
       newErrors.password = "Password is required";
     }
-
+  
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
-
+  
     setLoading(true);
-    try {
-      const response = await axios.post("/api/sign_in", { email: formData.email, password: formData.password }, {
-        headers: { 'Content-Type': 'application/json' },
-      });
-      if (response.status === 200) {
-        router.push('/');
-      } else {
-        setError(response?.data?.message || "Something went wrong");
-        setTimeout(() => setError(""), 5000);
-
-      }
-    } catch (err) {
-      setServerError(err.message);
-      setTimeout(() => setServerError(""), 5000);
-      console.error("Login error:", err);
-      setError(err.response?.data?.message || "Something went wrong");
+    setError(null);
+  
+    const result = await signIn("credentials", {
+      redirect: false, // لا تعيد التوجيه تلقائيًا
+      email: formData.email,
+      password: formData.password,
+    });
+  
+    setLoading(false);
+  
+    if (result?.error) {
+      setError(result.error);
       setTimeout(() => setError(""), 5000);
-    } finally {
-      setLoading(false);
+    } else {
+      router.push("/");
     }
   };
+  
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100 dark:bg-primaryColor font-sans">
