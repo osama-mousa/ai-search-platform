@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { redirect, useRouter } from 'next/navigation';
 import { useSession } from "next-auth/react";
 import Link from 'next/link';
+import axios from "axios";
 import { AiOutlineEye, AiOutlineEyeInvisible, AiOutlineExclamationCircle } from "react-icons/ai";
 import { FaExclamationCircle, FaTimes } from "react-icons/fa"; // استيراد الأيقونات
 import { CiLock } from "react-icons/ci";
@@ -77,19 +78,19 @@ export default function SignUpPage() {
     setLoading(true);
 
     try {
-      const response = await fetch("/api/sign_up", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+      const response = await axios.post("/api/sign_up", { email: formData.email, password: formData.password, confirmPassword: formData.confirmPassword }, {
+        headers: { 'Content-Type': 'application/json' },
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Something went wrong");
+      if (response.status === 200) {
+        router.push("/sign_in");
+        console.log("User registered successfully");
+      } else {
+        setErrors(response?.data?.message || "Something went wrong");
+        setTimeout(() => setErrors(""), 5000);
+
       }
 
-      router.push("/sign_in");
-      console.log("User registered successfully");
     } catch (err) {
       setServerError(err.message);
       setTimeout(() => setServerError(""), 5000); // إخفاء الرسالة بعد 5 ثوانٍ
