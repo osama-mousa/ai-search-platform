@@ -82,7 +82,7 @@ export default function SignUpPage() {
         headers: { 'Content-Type': 'application/json' },
       });
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         router.push("/sign_in");
         console.log("User registered successfully");
       } else {
