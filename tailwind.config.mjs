@@ -11,6 +11,7 @@ export default {
       colors: {
         primaryColor: "#292a2d", // #292a2d , #212121
         currentColor: "#525252",//#525252 ,#2f2f2f
+        sidbarColor: "#001932",
         buttonColor: "#4338ca",
         linkColor: "#3740f0",
         alertColor: "#171717",
