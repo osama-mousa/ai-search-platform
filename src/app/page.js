@@ -4,7 +4,10 @@ import React, { useState, useEffect } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import axios from "axios";
-import Header from "@/components/Header";
+import Header from "@/app/_components/Header";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
+import Sidebar from "./_components/Sidebar";
 
 export default function Home() {
   const [query, setQuery] = useState("");
@@ -13,6 +16,9 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [searchHistory, setSearchHistory] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { data: session, status } = useSession();
+
+  if (!session) redirect("/sign_in");
 
   useEffect(() => {
     const token = localStorage.getItem("token"); // افترض أن التوكن يتم تخزينه في Local Storage
@@ -45,20 +51,10 @@ export default function Home() {
 
       {/* Sidebar */}
       {/* Sidebar */}
-      {isLoggedIn && (
-        <aside className="w-64 bg-gray-800 text-white p-4 space-y-6">
-          <div className="text-2xl font-bold">Related Topics</div>
-          {/* هنا يمكن عرض المواضيع المرتبطة بالمستخدم */}
-          <ul>
-            <li>Topic 1</li>
-            <li>Topic 2</li>
-            <li>Topic 3</li>
-          </ul>
-        </aside>
-      )}
+      {session && <Sidebar />}
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col bg-gray-100 dark:bg-background text-Sidebar dark:text-gray-100 p-2">
+      <div className="flex-1 flex flex-col bg-gray-100 dark:bg-primaryColor text-alertColor dark:text-gray-100 p-2">
         <Header />
 
         <main className="flex-1 mt-28">
@@ -105,13 +101,13 @@ export default function Home() {
               </div>
             </div>
           )}
-          <div className="w-full max-w-3xl mx-auto bg-white dark:bg-input p-4 rounded-3xl shadow-md relative">
+          <div className="w-full max-w-3xl mx-auto bg-white dark:bg-inputColor p-4 rounded-3xl shadow-md relative">
             <input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Ask me anything..."
-              className="p-2 rounded w-full bg-gray-100 dark:bg-input focus:outline-none pr-12" // إضافة "pr-12" لترك مساحة للزر
+              className="p-2 rounded w-full bg-gray-100 dark:bg-transparent focus:outline-none pr-12" // إضافة "pr-12" لترك مساحة للزر
             />
             <button
               onClick={handleSearch}

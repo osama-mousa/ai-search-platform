@@ -19,7 +19,7 @@ export async function POST(req) {
     const { name, email, password, confirmPassword, image } = body;
 
     // التحقق من الحقول المطلوبة
-    if (!name || !email || !password || !confirmPassword) {
+    if (!email || !password || !confirmPassword) {
       return NextResponse.json(
         { message: "All fields are required" },
         { status: 400 }
@@ -49,7 +49,7 @@ export async function POST(req) {
     // حفظ المستخدم الجديد في قاعدة البيانات
     const newUser = await prisma.user.create({
       data: {
-        name,
+        name: name || null,
         email,
         password: hashedPassword,
         image: image || null, // حفظ الصورة إذا كانت موجودة
@@ -57,9 +57,12 @@ export async function POST(req) {
     });
 
     // حذف كلمة المرور قبل إرسال الاستجابة
-    const { password: _, ...userWithoutPassword } = user;
+    const { password: _, ...userWithoutPassword } = newUser;
 
-    return NextResponse.json({ message: "Sign Up successful", newUser: userWithoutPassword }, { status: 201 });
+    return NextResponse.json(
+      { message: "Sign Up successful", newUser: userWithoutPassword },
+      { status: 201 }
+    );
   } catch (error) {
     console.error("Error in signup API:", error);
     return NextResponse.json(
