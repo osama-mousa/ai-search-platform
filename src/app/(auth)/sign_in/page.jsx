@@ -87,7 +87,7 @@ export default function LoginPage() {
       setServerError(response.error);
       setTimeout(() => setServerError(""), 5000);
     } else {
-      setSuccessMessage(response?.data?.message || "Registration successful!");
+      setSuccessMessage("Login successfully!");
       setTimeout(() => {
         setSuccessMessage("");
         router.push("/");
@@ -115,8 +115,8 @@ export default function LoginPage() {
       {/* Toast Notification لرسالة النجاح */}
       {successMessage && (
         <div className="fixed top-10 left-0 right-0 flex justify-center">
-          <div className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg animate-slide-down flex items-center space-x-4">
-            <AiOutlineExclamationCircle className="text-xl text-white m-1" /> {/* أيقونة النجاح */}
+          <div className="bg-alertColor text-white px-6 py-3 rounded-lg shadow-lg animate-slide-down flex items-center space-x-4">
+            <AiOutlineExclamationCircle className="text-xl text-green-500 m-1" /> {/* أيقونة النجاح */}
             <span>{successMessage}</span> {/* نص الرسالة */}
             <button
               onClick={() => setSuccessMessage("")}
