@@ -7,6 +7,7 @@ import axios from "axios";
 import Header from "@/app/_components/Header";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
+import Sidebar from "./_components/Sidebar";
 
 export default function Home() {
   const [query, setQuery] = useState("");
@@ -17,7 +18,7 @@ export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { data: session, status } = useSession();
 
-  if(!session) redirect("/sign_in")
+  if (!session) redirect("/sign_in");
 
   useEffect(() => {
     const token = localStorage.getItem("token"); // افترض أن التوكن يتم تخزينه في Local Storage
@@ -50,17 +51,7 @@ export default function Home() {
 
       {/* Sidebar */}
       {/* Sidebar */}
-      {isLoggedIn && (
-        <aside className="w-64 bg-gray-800 text-white p-4 space-y-6">
-          <div className="text-2xl font-bold">Related Topics</div>
-          {/* هنا يمكن عرض المواضيع المرتبطة بالمستخدم */}
-          <ul>
-            <li>Topic 1</li>
-            <li>Topic 2</li>
-            <li>Topic 3</li>
-          </ul>
-        </aside>
-      )}
+      {session && <Sidebar />}
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col bg-gray-100 dark:bg-primaryColor text-alertColor dark:text-gray-100 p-2">
