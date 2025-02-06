@@ -18,6 +18,7 @@ export default function LoginPage() {
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [serverError, setServerError] = useState("");
+  const [successMessage, setSuccessMessage] = useState(""); // حالة لتخزين رسالة النجاح
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { data: session } = useSession();
@@ -67,29 +68,33 @@ export default function LoginPage() {
     if (!formData.password) {
       newErrors.password = "Password is required";
     }
-  
+
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
-  
+
     setLoading(true);
     setError(null);
-  
-    const result = await signIn("credentials", {
+
+    const response = await signIn("credentials", {
       redirect: false, // لا تعيد التوجيه تلقائيًا
       email: formData.email,
       password: formData.password,
     });
-  
+
     setLoading(false);
-  
-    if (result?.error) {
-      setError(result.error);
-      setTimeout(() => setError(""), 5000);
+
+    if (response?.error) {
+      setServerError(response.error);
+      setTimeout(() => setServerError(""), 5000);
     } else {
-      router.push("/");
+      setSuccessMessage(response?.data?.message || "Registration successful!");
+      setTimeout(() => {
+        setSuccessMessage("");
+        router.push("/");
+      }, 3000);
     }
   };
-  
+
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100 dark:bg-primaryColor font-sans">
@@ -101,6 +106,21 @@ export default function LoginPage() {
             <button
               onClick={() => setServerError("")}
               className="hover:bg-neutral-800 rounded-full p-1 transition-colors"
+            >
+              <FaTimes className="text-lg" /> {/* أيقونة الإغلاق */}
+            </button>
+          </div>
+        </div>
+      )}
+      {/* Toast Notification لرسالة النجاح */}
+      {successMessage && (
+        <div className="fixed top-10 left-0 right-0 flex justify-center">
+          <div className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg animate-slide-down flex items-center space-x-4">
+            <AiOutlineExclamationCircle className="text-xl text-white m-1" /> {/* أيقونة النجاح */}
+            <span>{successMessage}</span> {/* نص الرسالة */}
+            <button
+              onClick={() => setSuccessMessage("")}
+              className="hover:bg-green-700 rounded-full p-1 transition-colors"
             >
               <FaTimes className="text-lg" /> {/* أيقونة الإغلاق */}
             </button>

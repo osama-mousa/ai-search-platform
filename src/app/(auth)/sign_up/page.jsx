@@ -22,6 +22,8 @@ export default function SignUpPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [serverError, setServerError] = useState("");
+  const [successMessage, setSuccessMessage] = useState(""); // حالة لتخزين رسالة النجاح
+
 
   if (session) redirect("/")
 
@@ -71,6 +73,7 @@ export default function SignUpPage() {
     setAgreeToTerms(e.target.checked);
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (Object.keys(errors).length > 0) return;
@@ -78,27 +81,35 @@ export default function SignUpPage() {
     setLoading(true);
 
     try {
-      const response = await axios.post("/api/sign_up", { email: formData.email, password: formData.password, confirmPassword: formData.confirmPassword }, {
+      const response = await axios.post("/api/sign_up", {
+        email: formData.email,
+        password: formData.password,
+        confirmPassword: formData.confirmPassword
+      }, {
         headers: { 'Content-Type': 'application/json' },
       });
 
       if (response.status === 201) {
-        router.push("/sign_in");
-        console.log("User registered successfully");
+        setSuccessMessage(response?.data?.message || "Registration successful!"); // تعيين رسالة النجاح
+        setTimeout(() => {
+          setSuccessMessage("");
+          router.push("/sign_in");
+        }, 3000); // إخفاء الرسالة بعد 3 ثوانٍ وإعادة التوجيه
+
       } else {
         setErrors(response?.data?.message || "Something went wrong");
         setTimeout(() => setErrors(""), 5000);
-
       }
 
     } catch (err) {
       setServerError(err.message);
-      setTimeout(() => setServerError(""), 5000); // إخفاء الرسالة بعد 5 ثوانٍ
+      setTimeout(() => setServerError(""), 5000);
       console.error(err);
     } finally {
       setLoading(false);
     }
   };
+
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100 dark:bg-primaryColor font-sans">
@@ -111,6 +122,22 @@ export default function SignUpPage() {
             <button
               onClick={() => setServerError("")}
               className="hover:bg-neutral-800 rounded-full p-1 transition-colors"
+            >
+              <FaTimes className="text-lg" /> {/* أيقونة الإغلاق */}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Toast Notification لرسالة النجاح */}
+      {successMessage && (
+        <div className="fixed top-10 left-0 right-0 flex justify-center">
+          <div className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg animate-slide-down flex items-center space-x-4">
+            <AiOutlineExclamationCircle className="text-xl text-white m-1" /> {/* أيقونة النجاح */}
+            <span>{successMessage}</span> {/* نص الرسالة */}
+            <button
+              onClick={() => setSuccessMessage("")}
+              className="hover:bg-green-700 rounded-full p-1 transition-colors"
             >
               <FaTimes className="text-lg" /> {/* أيقونة الإغلاق */}
             </button>
