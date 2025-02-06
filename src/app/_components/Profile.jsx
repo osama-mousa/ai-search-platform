@@ -10,7 +10,7 @@ const Profile = () => {
                 // onClick={}
                 className="w-full right-0 text-center px-4 py-3 text-lg text-neutral-100 hover:bg-zinc-600 rounded-lg"
             >
-                {session?.user?.name}
+                {session?.user?.name || "Profile"}
             </button>
         </div>
     )
