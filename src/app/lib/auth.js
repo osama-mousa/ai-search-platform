@@ -37,6 +37,7 @@ export const authOptions = {
         const { password: _, ...userWithoutPassword } = user;
 
         return userWithoutPassword;
+        // return { id: user.id, name: user.name, email: user.email, image: user.image };
       },
     }),
   ],
@@ -47,15 +48,11 @@ export const authOptions = {
       return token;
     },
     async session({ session, token }) {
-      if (token) session.user.id = token.id;
+      if (token?.id) session.user.id = token.id;
       return session;
     },
   },
   pages: { signIn: "/sign_in" },
   secret: process.env.NEXTAUTH_SECRET,
   debug: true,
-};
-
-export const getSession = async () => {
-  return await getServerSession(authOptions);
 };
