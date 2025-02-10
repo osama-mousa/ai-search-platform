@@ -1,19 +1,41 @@
 "use client";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useSession } from "next-auth/react";
 
-export default function Sidebar({ chats, setCurrentChat }) {
+export default function Sidebar() {
   const router = useRouter();
+  const [chats, setChats] = useState([]);
+  const { data: session } = useSession();
+
+
+  useEffect(() => {
+    const fetchChats = async () => {
+      try {
+        const response = await axios.get("/api/chats", {
+          headers: {
+            Authorization: `Bearer ${session.accessToken}`,
+          },
+        });
+        setChats(response.data);
+      } catch (error) {
+        console.error("Error fetching chats:", error);
+      }
+    };
+    fetchChats();
+  }, []);
 
   const handleNewChat = () => {
-    setCurrentChat(null);
-    router.push("/"); // إعادة تعيين الصفحة الرئيسية بدون محادثة
+    // setCurrentChat(null);
+    z // إعادة تعيين الصفحة الرئيسية بدون محادثة
   };
 
   return (
-    <div className="w-64 h-screen bg-gray-900 text-white p-4">
+    <div className="w-64 h-screen bg-neutral-900 text-white p-4">
       <button
         onClick={handleNewChat}
-        className="w-full bg-blue-600 p-2 rounded mb-4 hover:bg-blue-500"
+        className="w-1/2 bg-buttonColor p-2 rounded-xl mb-4 hover:bg-blue-500"
       >
         + New Chat
       </button>
@@ -23,7 +45,7 @@ export default function Sidebar({ chats, setCurrentChat }) {
           <li key={chat.id} className="mb-2">
             <button
               onClick={() => setCurrentChat(chat)}
-              className="w-full p-2 bg-gray-800 rounded hover:bg-gray-700 text-left"
+              className="w-full p-2 bg-transparent rounded hover:bg-neutral-700 text-left text-sm"
             >
               {chat.title}
             </button>
