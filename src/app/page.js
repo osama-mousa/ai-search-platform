@@ -19,23 +19,6 @@ export default function Home() {
   const [currentChat, setCurrentChat] = useState(null);
 
   useEffect(() => {
-    if (!session) return;
-    const fetchChats = async () => {
-      try {
-        const response = await axios.get("/api/chats", {
-          headers: {
-            Authorization: `Bearer ${session.accessToken}`,
-          },
-        });
-        setChats(response.data);
-      } catch (error) {
-        console.error("Error fetching chats:", error);
-      }
-    };
-    fetchChats();
-  }, [session]);
-
-  useEffect(() => {
     if (!chatId) {
       setCurrentChat(null);
       return;
@@ -93,31 +76,14 @@ export default function Home() {
         <title>Chat Platform</title>
         <meta name="description" content="AI-powered chat platform" />
       </Head>
-      <Sidebar chats={chats} />
       <div className="flex-1 flex flex-col bg-gray-100 dark:bg-primaryColor text-alertColor dark:text-gray-100 p-2">
         <Header />
         <div className="flex-1 p-4 overflow-y-auto">
-          {currentChat ? (
-            <div>
-              <h1 className="text-2xl font-bold">{currentChat.title}</h1>
-              <div className="bg-transparent p-4 rounded h-96 overflow-y-auto">
-                {currentChat.content?.map((msg, index) => (
-                  <p key={index} className="p-2 bg-white rounded mb-2">
-                    {msg.content}
-                  </p>
-                ))}
-              </div>
-            </div>
-          ) : (
-            <div className="w-full max-w-3xl mx-auto mt-64 text-center font-bold text-3xl m-10">
-              <h1>What are you looking for?</h1>
-            </div>
-          )}
-
+          <div className="w-full max-w-3xl mx-auto mt-64 text-center font-bold text-3xl m-10">
+            <h1>What are you looking for?</h1>
+          </div>
           <div
-            className={`w-full max-w-3xl mx-auto bg-white dark:bg-inputColor p-4 rounded-3xl shadow-md relative flex ${
-              currentChat ? "mb-10" : "mt-10"
-            }`}
+            className={`w-full max-w-3xl mx-auto bg-white dark:bg-inputColor p-4 rounded-3xl shadow-md relative flex mt-10`}
           >
             <input
               type="text"
@@ -134,8 +100,6 @@ export default function Home() {
             </button>
           </div>
         </div>
-
-        <Footer />
       </div>
     </div>
   );
