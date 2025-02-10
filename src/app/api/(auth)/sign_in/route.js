@@ -31,7 +31,7 @@ export async function POST(req) {
     // إزالة كلمة المرور من الاستجابة
     const { password: _, ...userWithoutPassword } = user;
 
-    return NextResponse.json({ message: "Login successful", user: userWithoutPassword }, { status: 200 });
+    return NextResponse.json({ message: "Login successfully!", user: userWithoutPassword }, { status: 200 });
   } catch (error) {
     console.error("Error in login API:", error);
     return NextResponse.json({ message: "Internal Server Error", error: error.message }, { status: 500 });
