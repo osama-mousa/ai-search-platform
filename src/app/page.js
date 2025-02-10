@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Head from "next/head";
 import { useSession } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { redirect, useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 import Header from "@/app/_components/Header";
 import Sidebar from "./_components/Sidebar";
@@ -17,6 +17,8 @@ export default function Home() {
   const [message, setMessage] = useState("");
   const [chats, setChats] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
+
+  if (!session) redirect("/sign_in");
 
   useEffect(() => {
     if (!chatId) {
@@ -89,6 +91,11 @@ export default function Home() {
               type="text"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  sendMessage(); // إرسال الرسالة عند الضغط على Enter
+                }
+              }}
               className="flex-1 p-2 rounded bg-gray-100 dark:bg-transparent focus:outline-none"
               placeholder="Type a message..."
             />
