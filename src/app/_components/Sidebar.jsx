@@ -9,8 +9,9 @@ export default function Sidebar() {
   const [chats, setChats] = useState([]);
   const { data: session } = useSession();
 
-
   useEffect(() => {
+    if (!session) return;
+
     const fetchChats = async () => {
       try {
         const response = await axios.get("/api/chats", {
@@ -23,12 +24,16 @@ export default function Sidebar() {
         console.error("Error fetching chats:", error);
       }
     };
+
     fetchChats();
-  }, []);
+  }, [session]);
 
   const handleNewChat = () => {
-    // setCurrentChat(null);
-    z // إعادة تعيين الصفحة الرئيسية بدون محادثة
+    router.push("/"); // إعادة التوجيه إلى الصفحة الرئيسية بدون محادثة
+  };
+
+  const handleChatClick = (chatId) => {
+    router.push(`/chat/${chatId}`); // التوجيه إلى صفحة الشات المحددة
   };
 
   return (
@@ -44,7 +49,7 @@ export default function Sidebar() {
         {chats.map((chat) => (
           <li key={chat.id} className="mb-2">
             <button
-              onClick={() => setCurrentChat(chat)}
+              onClick={() => handleChatClick(chat.id)}
               className="w-full p-2 bg-transparent rounded hover:bg-neutral-700 text-left text-sm"
             >
               {chat.title}
