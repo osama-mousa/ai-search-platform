@@ -2,16 +2,26 @@ import prisma from "@/app/lib/prisma";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/lib/auth";
 import { NextResponse } from "next/server";
+import jwt from "jsonwebtoken";
 
 // 🔹 جلب المحادثات الخاصة بالمستخدم
 export async function GET(req) {
-  const session = await getServerSession(authOptions);
-  if (!session || !session.user?.id)
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const authHeader = req.headers.get("Authorization");
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return NextResponse.json(
+      { error: "Unauthorized: No Token Provided" },
+      { status: 401 }
+    );
+  }
+
+  const token = authHeader.split(" ")[1];
 
   try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log("Decoded Token:", decoded); // 🔹 لمعرفة القيم بعد فك التشفير
+
     const chats = await prisma.chat.findMany({
-      where: { userId: session.user.id },
+      where: { userId: decoded.userId },
       orderBy: { updatedAt: "desc" },
     });
 
@@ -27,11 +37,18 @@ export async function GET(req) {
 
 // 🔹 إنشاء أو تحديث محادثة
 export async function POST(req) {
-  const session = await getServerSession(authOptions);
-  if (!session || !session.user?.id)
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const authHeader = req.headers.get("Authorization");
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return NextResponse.json(
+      { error: "Unauthorized: No Token Provided" },
+      { status: 401 }
+    );
+  }
+
+  const token = authHeader.split(" ")[1];
 
   try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const body = await req.json();
     const { chatId, message } = body;
 
@@ -48,7 +65,7 @@ export async function POST(req) {
       chat = await prisma.chat.create({
         data: {
           title: message.slice(0, 20) || "New Chat",
-          userId: session.user.id,
+          userId: decoded.userId,
           messages: { create: [{ content: message }] }, // ⬅️ إنشاء الرسالة داخل المحادثة
         },
         include: { messages: true }, // ✅ استرجاع الرسائل مع المحادثة
@@ -56,7 +73,7 @@ export async function POST(req) {
     } else {
       // ⬅️ إضافة رسالة جديدة لمحادثة موجودة
       const chatExists = await prisma.chat.findUnique({
-        where: { id: chatId, userId: session.user.id },
+        where: { id: chatId, userId: decoded.userId },
       });
 
       if (!chatExists) {
@@ -85,14 +102,21 @@ export async function POST(req) {
 
 // 🔹 جلب محادثة معينة بمحتواها
 export async function GET_BY_ID(req, { params }) {
-  const session = await getServerSession(authOptions);
-  if (!session)
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const authHeader = req.headers.get("Authorization");
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return NextResponse.json(
+      { error: "Unauthorized: No Token Provided" },
+      { status: 401 }
+    );
+  }
+
+  const token = authHeader.split(" ")[1];
 
   try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const { id } = params;
     const chat = await prisma.chat.findUnique({
-      where: { id, userId: session.user.id },
+      where: { id, userId: decoded.userId },
       include: { messages: true }, // ✅ تضمين الرسائل مع المحادثة
     });
 
@@ -112,15 +136,22 @@ export async function GET_BY_ID(req, { params }) {
 
 // 🔹 حذف محادثة
 export async function DELETE(req) {
-  const session = await getServerSession(authOptions);
-  if (!session)
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const authHeader = req.headers.get("Authorization");
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return NextResponse.json(
+      { error: "Unauthorized: No Token Provided" },
+      { status: 401 }
+    );
+  }
+
+  const token = authHeader.split(" ")[1];
 
   try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const { id } = await req.json();
 
     const chat = await prisma.chat.findUnique({
-      where: { id, userId: session.user.id },
+      where: { id, userId: decoded.userId },
     });
 
     if (!chat) {

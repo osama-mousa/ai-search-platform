@@ -2,17 +2,24 @@ import prisma from "@/app/lib/prisma";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/lib/auth";
 import { NextResponse } from "next/server";
+import jwt from "jsonwebtoken";
 
 export async function GET(req, { params }) {
-  const session = await getServerSession(authOptions);
-  if (!session || !session.user?.id) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const authHeader = req.headers.get("Authorization");
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return NextResponse.json(
+      { error: "Unauthorized: No Token Provided" },
+      { status: 401 }
+    );
   }
 
+  const token = authHeader.split(" ")[1];
+
   try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const { id } = params;
     const chat = await prisma.chat.findUnique({
-      where: { id, userId: session.user.id },
+      where: { id, userId: decoded.userId },
       include: { messages: true }, // ✅ تضمين الرسائل مع المحادثة
     });
 
