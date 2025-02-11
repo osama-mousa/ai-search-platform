@@ -4,6 +4,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prisma from "@/app/lib/prisma";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 export const authOptions = {
   adapter: PrismaAdapter(prisma),
@@ -27,32 +28,41 @@ export const authOptions = {
           where: { email: credentials.email },
         });
 
-        if (!user || !(await bcrypt.compare(credentials.password, user.password))) {
+        if (
+          !user ||
+          !(await bcrypt.compare(credentials.password, user.password))
+        ) {
           throw new Error("Invalid credentials");
         }
-        
+
         const { password: _, ...userWithoutPassword } = user;
 
         return userWithoutPassword;
+        // return { id: user.id, name: user.name, email: user.email, image: user.image };
       },
     }),
   ],
   session: { strategy: "jwt" },
   callbacks: {
-    async jwt({ token, user, account }) {
-      if (user) token.id = user.id;
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.accessToken = jwt.sign(
+          { userId: user.id },
+          process.env.JWT_SECRET,
+          { expiresIn: "7d" }
+        );
+      }
       return token;
     },
     async session({ session, token }) {
-      if (token) session.user.id = token.id;
+      if (token?.accessToken) {
+        session.accessToken = token.accessToken;
+      }
       return session;
     },
   },
   pages: { signIn: "/sign_in" },
   secret: process.env.NEXTAUTH_SECRET,
   debug: true,
-};
-
-export const getSession = async () => {
-  return await getServerSession(authOptions);
 };

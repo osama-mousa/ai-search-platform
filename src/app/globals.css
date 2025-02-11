@@ -32,3 +32,7 @@ body {
 .animate-slide-down {
   animation: slide-down 0.5s ease-out;
 }
+
+.custom-scrollbar {
+  scrollbar-color: #3a3b3d #171717; /* لون الجزء المتحرك والخلفية في الوضع الليلي */
+}
