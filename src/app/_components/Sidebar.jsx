@@ -37,7 +37,7 @@ export default function Sidebar() {
   };
 
   return (
-    <div className="w-64 h-screen bg-neutral-900 text-white p-4 overflow-y-scroll">
+    <div className="w-64 h-screen bg-neutral-900 text-white p-4 custom-scrollbar overflow-y-scroll">
       <button
         onClick={handleNewChat}
         className="w-1/2 bg-buttonColor p-2 rounded-xl mb-4 hover:bg-blue-500"
