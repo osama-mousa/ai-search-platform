@@ -7,6 +7,7 @@ import axios from "axios";
 import Header from "@/app/_components/Header";
 import Sidebar from "@/app/_components/Sidebar";
 import { IoArrowUp } from "react-icons/io5";
+import { GrFormEdit } from "react-icons/gr";
 
 export default function ChatPage() {
   const { data: session } = useSession();
@@ -17,7 +18,7 @@ export default function ChatPage() {
   const [messages, setMessages] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
 
-    if (!session) redirect("/sign_in");
+  if (!session) redirect("/sign_in");
 
   useEffect(() => {
     if (!chatId) {
@@ -110,34 +111,32 @@ export default function ChatPage() {
       </Head>
       <div className="flex-1 flex flex-col bg-gray-100 dark:bg-primaryColor text-alertColor dark:text-gray-100 p-2">
         <Header />
-        <div className="flex-1 p-4 overflow-y-auto">
+        <div className="flex justify-center">
+          <h1 className="text-xl font-bold">{currentChat?.title}</h1>
+        </div>
+        <div className="max-w-3xl mx-auto w-full p-4 overflow-y-auto">
           {currentChat ? (
             <div>
-              <h1 className="text-2xl font-bold">
-                {currentChat.title || "New Chat"}
-              </h1>
               <div className="max-w-3xl justify-center flex w-full transform">
-                <div className="bg-transparent  p-4 flex flex-col space-y-2 w-full rounded-xl h-full overflow-auto">
+                <div className="bg-transparent p-4 flex flex-col space-y-2 w-full rounded-xl h-full overflow-auto">
                   {messages.map((msg) => (
                     <div
                       key={msg.id}
-                      className="p-2 bg-inputColor rounded-xl flex justify-center items-center"
+                      className="group flex justify-end items-center relative"
                     >
-                      <p className="flex-1">{msg.content}</p>
-                      <div className="flex space-x-2">
-                        <button
-                          onClick={() => updateMessage(msg.id, "رسالة معدلة")}
-                          className="text-blue-500"
-                        >
-                          ✏️
-                        </button>
-                        <button
-                          onClick={() => deleteMessage(msg.id)}
-                          className="text-red-500"
-                        >
-                          🗑
-                        </button>
-                      </div>
+                      <button
+                        onClick={() => updateMessage(msg.id, "رسالة معدلة")}
+                        className="right-1 text-transparent h-8 w-8 transition-colors duration-200"
+                      >
+                        <GrFormEdit
+                          className="group-hover:text-neutral-400 rounded-full p-1 hover:bg-inputColor"
+                          size={30}
+                        />
+                      </button>
+                      <p className="bg-inputColor rounded-3xl p-3 text-right">
+                        {msg.content}
+                      </p>
+                      {/* زر التعديل (يظهر عند التحويم) */}
                     </div>
                   ))}
                 </div>
