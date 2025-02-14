@@ -8,6 +8,7 @@ import Header from "@/app/_components/Header";
 import Sidebar from "@/app/_components/Sidebar";
 import { IoArrowUp } from "react-icons/io5";
 import { GrFormEdit } from "react-icons/gr";
+import { RiAttachmentLine } from "react-icons/ri";
 
 export default function ChatPage() {
   const { data: session } = useSession();
@@ -103,6 +104,14 @@ export default function ChatPage() {
     }
   };
 
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      // قم بمعالجة تحميل الملف هنا
+      console.log("File uploaded:", file);
+    }
+  };
+
   return (
     <div className="flex h-screen">
       <Head>
@@ -149,26 +158,49 @@ export default function ChatPage() {
           )}
 
           <div
-            className={`fixed bottom-0 left-[calc(50%+8rem)] transform -translate-x-1/2 mb-10 w-full max-w-3xl bg-white dark:bg-inputColor p-4 rounded-3xl shadow-md flex justify-center`}
+            className={`fixed bottom-0 left-[calc(50%+8rem)] transform -translate-x-1/2 mb-10 w-full max-w-3xl bg-white dark:bg-inputColor p-4 rounded-3xl shadow-md flex justify-center flex-col space-y-4 mt-10`}
           >
-            <input
-              type="text"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  sendMessage(); // إرسال الرسالة عند الضغط على Enter
-                }
-              }}
-              className="flex-1 p-2 rounded bg-gray-100 dark:bg-transparent focus:outline-none"
-              placeholder="Type a message..."
-            />
-            <button
-              onClick={sendMessage}
-              className="ml-2 w-8 h-8 rounded-full bg-white text-white flex items-center justify-center hover:bg-neutral-300"
-            >
-              <IoArrowUp className="w-6 h-6 text-neutral-900" />
-            </button>
+            <div className="relative">
+              <input
+                type="text"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    sendMessage(); // إرسال الرسالة عند الضغط على Enter
+                  }
+                }}
+                className="flex-1 p-2 rounded bg-gray-100 dark:bg-transparent focus:outline-none"
+                placeholder="Type a message..."
+              />
+            </div>
+
+            <div className="flex justify-end space-x-2">
+              {/* زر تحميل الملف */}
+              <label
+                htmlFor="file-upload"
+                className="w-8 h-8 group rounded-full bg-transparent flex items-center justify-center hover:bg-neutral-600 cursor-pointer"
+              >
+                <RiAttachmentLine className="w-6 h-6 text-neutral-400 group-hover:text-neutral-200" />
+                <input
+                  id="file-upload"
+                  type="file"
+                  className="hidden"
+                  onChange={handleFileUpload}
+                />
+              </label>
+
+              {/* زر الإرسال */}
+              <button
+                onClick={sendMessage}
+                disabled={!message.trim()}
+                className={`w-8 h-8 rounded-full bg-white text-white flex items-center justify-center hover:bg-neutral-300 ${
+                  !message.trim() ? "opacity-50 cursor-not-allowed" : ""
+                }`}
+              >
+                <IoArrowUp className="w-6 h-6 text-neutral-900" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
