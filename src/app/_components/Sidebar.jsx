@@ -15,7 +15,7 @@ export default function Sidebar() {
   const { id: chatId } = useParams(); // الحصول على chatId الحالي من الرابط
   const [chats, setChats] = useState([]);
   const { data: session } = useSession();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // حالة الـ Sidebar
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true); // حالة الـ Sidebar
 
   useEffect(() => {
     if (!session) return;
@@ -130,16 +130,18 @@ export default function Sidebar() {
                     key={chat.id}
                     className="my-1 mr-1 text-neutral-300 font-sans"
                   >
-                    <button
-                      onClick={() => handleChatClick(chat.id)}
-                      className={`w-full p-2 rounded-lg text-left text-sm ${
-                        chat.id === chatId
-                          ? "bg-neutral-800 text-white" // تنسيق الشات النشطة
-                          : "bg-transparent hover:bg-neutral-800" // تنسيق الشات غير النشطة
-                      }`}
-                    >
-                      {chat.title}
-                    </button>
+                    <a href={`/chat/${chat.id}`}>
+                      <button
+                        onClick={() => handleChatClick(chat.id)}
+                        className={`w-full p-2 rounded-lg text-left text-sm ${
+                          chat.id === chatId
+                            ? "bg-neutral-800 text-white" // تنسيق الشات النشطة
+                            : "bg-transparent hover:bg-neutral-800" // تنسيق الشات غير النشطة
+                        }`}
+                      >
+                        {chat.title}
+                      </button>
+                    </a>
                   </li>
                 ))}
               </ul>
