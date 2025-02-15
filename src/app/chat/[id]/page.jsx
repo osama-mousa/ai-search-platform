@@ -19,7 +19,7 @@ export default function ChatPage() {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
-  const [textareaHeight, setTextareaHeight] = useState('30px'); // حالة لتتبع ارتفاع textarea
+  const [textareaHeight, setTextareaHeight] = useState("30px"); // حالة لتتبع ارتفاع textarea
 
   const textareaRef = useRef(null); // ref للوصول إلى textarea
 
@@ -49,8 +49,10 @@ export default function ChatPage() {
 
   const sendMessage = async () => {
     if (!message.trim()) return;
+
     try {
-      const res = await axios.post(
+      // إرسال رسالة المستخدم إلى الخادم
+      const userMessageResponse = await axios.post(
         `/api/chats/${chatId}`,
         { content: message },
         {
@@ -59,11 +61,39 @@ export default function ChatPage() {
           },
         }
       );
-      if (res.data.newMessage) {
-        setMessages((prevMessages) => [...prevMessages, res.data.newMessage]);
+
+      if (userMessageResponse.data.newMessage) {
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          userMessageResponse.data.newMessage,
+        ]);
       }
+
+      // إرسال رسالة المستخدم إلى الذكاء الاصطناعي
+      const aiResponse = await axios.post("/api/ai", { message });
+
+      if (aiResponse.data.response) {
+        // حفظ رد الذكاء الاصطناعي في قاعدة البيانات
+        const aiMessageResponse = await axios.post(
+          `/api/chats/${chatId}`,
+          { content: aiResponse.data.response },
+          {
+            headers: {
+              Authorization: `Bearer ${session?.accessToken}`,
+            },
+          }
+        );
+
+        if (aiMessageResponse.data.newMessage) {
+          setMessages((prevMessages) => [
+            ...prevMessages,
+            aiMessageResponse.data.newMessage,
+          ]);
+        }
+      }
+
       setMessage("");
-      setTextareaHeight("30px"); // إعادة تعيين الارتفاع بعد إرسال الرسالة
+      setTextareaHeight("100px"); // إعادة تعيين الارتفاع
     } catch (error) {
       console.error("Error sending message:", error);
     }
@@ -148,18 +178,28 @@ export default function ChatPage() {
                 {messages.map((msg) => (
                   <div
                     key={msg.id}
-                    className="group flex justify-end items-center relative"
+                    className={`group flex ${
+                      msg.role === "user" ? "justify-end" : "justify-start"
+                    } items-center relative`}
                   >
-                    <button
-                      onClick={() => updateMessage(msg.id, "رسالة معدلة")}
-                      className="right-1 text-transparent h-8 w-8 transition-colors duration-200"
+                    {msg.role === "user" && (
+                      <button
+                        onClick={() => updateMessage(msg.id, "رسالة معدلة")}
+                        className="right-1 text-transparent h-8 w-8 transition-colors duration-200"
+                      >
+                        <GrFormEdit
+                          className="group-hover:text-neutral-400 rounded-full p-1 hover:bg-inputColor"
+                          size={30}
+                        />
+                      </button>
+                    )}
+                    <p
+                      className={`${
+                        msg.role === "user"
+                          ? "bg-inputColor rounded-3xl p-3 text-right"
+                          : "bg-transparent rounded-3xl p-3 text-left"
+                      } shadow-lg`}
                     >
-                      <GrFormEdit
-                        className="group-hover:text-neutral-400 rounded-full p-1 hover:bg-inputColor"
-                        size={30}
-                      />
-                    </button>
-                    <p className="bg-inputColor rounded-3xl p-3 text-right shadow-lg">
                       {msg.content}
                     </p>
                   </div>
