@@ -81,6 +81,7 @@ model Message {
   id        String   @id @default(uuid())
   chatId    String
   content   String   @db.Text
+  role      String    // "user" أو "assistant"
   createdAt DateTime @default(now())
   chat      Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
 }
