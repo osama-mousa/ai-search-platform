@@ -18,6 +18,7 @@ export default function Home() {
   const [message, setMessage] = useState("");
   const [chats, setChats] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
+  const [textareaHeight, setTextareaHeight] = useState("30px");
 
   if (!session) redirect("/sign_in");
 
@@ -81,6 +82,18 @@ export default function Home() {
     }
   };
 
+  const handleTextareaChange = (e) => {
+    setMessage(e.target.value);
+
+    // إعادة تعيين الارتفاع إلى الحد الأدنى أولاً
+    e.target.style.height = "30px";
+
+    // حساب الارتفاع الجديد بناءً على المحتوى
+    const newHeight = Math.min(e.target.scrollHeight, 300); // الحد الأقصى 300px
+    e.target.style.height = `${newHeight}px`;
+    setTextareaHeight(`${newHeight}px`);
+  };
+
   return (
     <div className="flex h-screen">
       <Head>
@@ -98,16 +111,24 @@ export default function Home() {
           >
             {/* حقل الإدخال */}
             <div className="relative">
-              <input
-                type="text"
+              <textarea
+                ref={textareaRef}
                 value={message}
-                onChange={(e) => setMessage(e.target.value)}
+                onChange={handleTextareaChange}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter") {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault(); // منع السلوك الافتراضي (إضافة سطر جديد)
                     sendMessage(); // إرسال الرسالة عند الضغط على Enter
                   }
+                  // إذا كان Shift + Enter، يتم إضافة سطر جديد بشكل طبيعي
                 }}
-                className="w-full p-2 rounded bg-gray-100 dark:bg-transparent focus:outline-none"
+                className="flex-1 p-2 rounded bg-gray-100 dark:bg-transparent focus:outline-none w-full custom-scrollbar resize-none"
+                style={{
+                  minHeight: "10px", // الحد الأدنى للارتفاع
+                  maxHeight: "300px", // الحد الأقصى للارتفاع
+                  height: textareaHeight, // الارتفاع الحالي
+                  overflowY: "auto", // إظهار شريط التمرير عند الحاجة
+                }}
                 placeholder="Message Dinosaur"
               />
             </div>
