@@ -42,8 +42,27 @@ export async function POST(req, { params }) {
   }
 
   const token = authHeader.split(" ")[1];
+
+  // التحقق من وجود body
+  if (!req.body) {
+    return NextResponse.json(
+      { error: "Request body is required" },
+      { status: 400 }
+    );
+  }
+
+  let body;
+  try {
+    body = await req.json(); // تحليل JSON
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Invalid JSON format in request body" },
+      { status: 400 }
+    );
+  }
+
   const { id: chatId } = params;
-  const { content } = await req.json();
+  const { content, role = "user" } = body; // استخراج البيانات من body
 
   if (!content || content.trim() === "") {
     return NextResponse.json(
@@ -69,6 +88,7 @@ export async function POST(req, { params }) {
       data: {
         content,
         chatId,
+        role, // تمييز الرسالة (user أو assistant)
       },
     });
 
@@ -76,7 +96,7 @@ export async function POST(req, { params }) {
   } catch (error) {
     console.error("Error adding message:", error);
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      { error: "Internal Server Error", details: error.message },
       { status: 500 }
     );
   }
