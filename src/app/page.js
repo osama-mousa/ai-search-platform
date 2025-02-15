@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Head from "next/head";
 import { useSession } from "next-auth/react";
 import { redirect, useRouter, useSearchParams } from "next/navigation";
@@ -19,6 +19,8 @@ export default function Home() {
   const [chats, setChats] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
   const [textareaHeight, setTextareaHeight] = useState("30px");
+
+  const textareaRef = useRef(null); // ref للوصول إلى textarea
 
   if (!session) redirect("/sign_in");
 
