@@ -80,7 +80,7 @@ model Chat {
 model Message {
   id        String   @id @default(uuid())
   chatId    String
-  content   String
+  content   String   @db.Text
   createdAt DateTime @default(now())
   chat      Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
 }
