@@ -1,8 +1,7 @@
 import prisma from "@/app/lib/prisma";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/app/lib/auth";
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
+import { getAIResponse } from "@/app/lib/ai";
 
 // 🔹 جلب المحادثات الخاصة بالمستخدم
 export async function GET(req) {
@@ -66,7 +65,9 @@ export async function POST(req) {
         data: {
           title: message.slice(0, 20) || "New Chat",
           userId: decoded.userId,
-          messages: { create: [{ content: message }] }, // ⬅️ إنشاء الرسالة داخل المحادثة
+          messages: {
+            create: [{ content: message, role: "user" }], // ⬅️ إنشاء رسالة المستخدم
+          },
         },
         include: { messages: true }, // ✅ استرجاع الرسائل مع المحادثة
       });
@@ -80,10 +81,20 @@ export async function POST(req) {
         return NextResponse.json({ error: "Chat not found" }, { status: 404 });
       }
 
+      // حفظ رسالة المستخدم
       await prisma.message.create({
-        data: { chatId, content: message },
+        data: { chatId, content: message, role: "user" },
       });
 
+      // الحصول على رد الذكاء الاصطناعي
+      const aiResponse = await getAIResponse(message);
+
+      // حفظ رد الذكاء الاصطناعي
+      await prisma.message.create({
+        data: { chatId, content: aiResponse, role: "assistant" },
+      });
+
+      // استرجاع المحادثة مع الرسائل
       chat = await prisma.chat.findUnique({
         where: { id: chatId },
         include: { messages: true }, // ✅ تحديث المحادثة بالرسائل الجديدة
