@@ -55,3 +55,19 @@ body {
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+
+/* box shadow */
+
+.glow {
+  box-shadow: 0 0 50px #a21dfa55;
+}
+.glow-10 {
+  box-shadow: 0 0 10px #3f04b5;
+}
+.glow-20 {
+  box-shadow: 0 0 20px #a21dfa55;
+}
+.glow-30 {
+  box-shadow: 0 0 30px #a21dfa55;
+}
